@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+"""define a function insert_school()"""
+
+
+def insert_school(mongo_collection, **kwargs):
+    """inserts a new document in a collection based on kwargs
+    Args:
+        mongo_collection(Collection): a mongodb collection
+        kwargs(dict): key/word arguments
+    """
+    return mongo_collection.insert_many(kwargs)
