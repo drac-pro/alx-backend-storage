@@ -1,0 +1,2 @@
+// uses or creates a new database in MongoDB
+use my_db
