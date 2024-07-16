@@ -8,4 +8,4 @@ def insert_school(mongo_collection, **kwargs):
         mongo_collection(Collection): a mongodb collection
         kwargs(dict): key/word arguments
     """
-    return mongo_collection.insert_many(kwargs)
+    return mongo_collection.insert_one(kwargs).inserted_id
