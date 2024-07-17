@@ -22,7 +22,7 @@ def main():
         {
             '$group': {
                 '_id': '$ip',
-                'count': {'$count': {}}
+                'count': {'$sum': 1}
             }
         },
         {
