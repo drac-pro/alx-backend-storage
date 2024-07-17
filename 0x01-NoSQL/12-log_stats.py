@@ -2,7 +2,9 @@
 """python script that provides some stats about Nginx logs stored in MongoDB"""
 from pymongo import MongoClient
 
+
 def main():
+    """main function to execute"""
     client = MongoClient()
     db = client.logs
     print(f'{db.nginx.count_documents({})} logs')
