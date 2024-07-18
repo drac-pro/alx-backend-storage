@@ -20,6 +20,7 @@ def cache_url_req(fn: Callable) -> Callable:
         if cached_page:
             return cached_page.decode('utf-8')
         page = fn(url)
+        store.set(f'count:{url}', 0)
         store.setex(f'cached:{url}', 10, page)
         return page
     return wrapper
