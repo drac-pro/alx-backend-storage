@@ -25,6 +25,7 @@ def cache_url_req(fn: Callable) -> Callable:
     return wrapper
 
 
+@cache_url_req
 def get_page(url: str) -> str:
     """returns the html page of a url"""
     return requests.get(url).text
