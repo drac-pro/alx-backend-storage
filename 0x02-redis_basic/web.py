@@ -15,18 +15,14 @@ def cache_url_req(fn: Callable) -> Callable:
     @wraps(fn)
     def wrapper(url):
         """decorator wrapper"""
-        cache_key = f'cache:{url}'
-        count_key = f'count:{url}'
-        store.incr(count_key)
-
-        cached_page = store.get(cache_key)
-        if cached_page:
-            return cached_page.decode('utf-8')
-
-        page = fn(url)
-        store.set(count_key, 0)
-        store.setex(cache_key, 10, page)
-        return page
+        store.incr(f'count:{url}')
+        result = store.get(f'result:{url}')
+        if result:
+            return result.decode('utf-8')
+        result = fn(url)
+        store.set(f'count:{url}', 0)
+        store.setex(f'result:{url}', 10, result)
+        return result
     return wrapper
 
 
