@@ -9,20 +9,25 @@ from typing import Callable
 store = redis.Redis()
 
 
-def cache_url_req(fn: Callable) -> Callable:
+def cache_url_req(func: Callable) -> Callable:
     """track how many times a particular URL was accessed
     and cache the result with an expiration time of 10 seconds."""
-    @wraps(fn)
+    @wraps(func)
     def wrapper(url):
         """decorator wrapper"""
-        store.incr(f'count:{url}')
-        result = store.get(f'result:{url}')
-        if result:
-            return result.decode('utf-8')
-        result = fn(url)
-        store.set(f'count:{url}', 0)
-        store.setex(f'result:{url}', 10, result)
-        return result
+        key = "cached:" + url
+        cached_value = store.get(key)
+        if cached_value:
+            return cached_value.decode("utf-8")
+
+        # Get new content and update cache
+        key_count = "count:" + url
+        html_content = func(url)
+
+        store.incr(key_count)
+        store.set(key, html_content, ex=10)
+        store.expire(key, 10)
+        return html_content
     return wrapper
 
 
